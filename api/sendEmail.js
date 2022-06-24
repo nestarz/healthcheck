@@ -1,8 +1,7 @@
 import net from "net";
 
-const SMTP_AUTH_KEY = process.env.SMTP_AUTH_KEY;
+const SMTP_AUTH_KEY = process.env.SMTP_AUTH_KEY; // echo -ne "\0usename\password"|base64
 const FROM_EMAIL = process.env.FROM_EMAIL;
-console.log(SMTP_AUTH_KEY, FROM_EMAIL);
 
 const noopLog = (v) => console.log(v) ?? v;
 const sendMail = ({ from = FROM_EMAIL, to, subject, content }) =>
@@ -18,13 +17,14 @@ const sendMail = ({ from = FROM_EMAIL, to, subject, content }) =>
     ];
 
     let i = 0;
-    console.log(i);
     const socket = net
       .createConnection(587, "ssl0.ovh.net")
       .on("data", (b) =>
         /^221/.test(noopLog(b.toString()))
           ? res(socket.destroy())
-          : /(Error: )|(rejected: )|(535)|(Authentication failed)/.test(b.toString())
+          : /(Error: )|(rejected: )|(535)|(Authentication failed)/.test(
+              b.toString()
+            )
           ? rej((socket.destroy(), b.toString()))
           : i >= commands.length
           ? rej((socket.destroy(), "i>=commands"))
