@@ -2,6 +2,7 @@ import net from "net";
 
 const SMTP_AUTH_KEY = process.env.SMTP_AUTH_KEY;
 const FROM_EMAIL = process.env.FROM_EMAIL;
+console.log(SMTP_AUTH_KEY, FROM_EMAIL);
 
 const noopLog = (v) => console.log(v) ?? v;
 const sendMail = ({ from = FROM_EMAIL, to, subject, content }) =>
