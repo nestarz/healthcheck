@@ -20,16 +20,16 @@ jobs:
       - uses: actions/checkout@v3
       - name: Use Node.js
         uses: actions/setup-node@v3
+      - run: |
+          tee -a mock.js <<EOF
+          import(process.argv[2]).then(({ default: handler }) =>
+            handler({ body: process.argv[3] }, { end: console.log })
+          );
+          EOF
       - run: if echo $(curl -sL --head ${{ matrix.package }}) | grep "HTTP/2 200"); then echo OK; else exit 1; fi
         continue-on-error: true
       - if: steps.action.outcome != 'success'
         env:
           SMTP_AUTH_KEY: ${{ secrets.SMTP_AUTH_KEY }}
           FROM_EMAIL: ${{ secrets.FROM_EMAIL }}
-        run: |
-          tee -a mock.js <<EOF
-          import(process.argv[2]).then(({ default: handler }) =>
-            handler({ body: process.argv[3] }, { end: console.log })
-          );
-          EOF
-          node mock.js api/sendEmail.js '{"email":"alt.da-8oetp0g2@yopmail.com", "subject":"${{ matrix.package }}) est inaccessible! ", "content":"Message automatique"}'
+        run: node mock.js api/sendEmail.js '{"email":"alt.da-8oetp0g2@yopmail.com", "subject":"${{ matrix.package }}) est inaccessible! ", "content":"Message automatique {{ steps.action.outcome }}"}'
