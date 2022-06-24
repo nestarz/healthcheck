@@ -31,4 +31,4 @@ jobs:
         env:
           SMTP_AUTH_KEY: ${{ secrets.SMTP_AUTH_KEY }}
           FROM_EMAIL: ${{ secrets.FROM_EMAIL }}
-        run: node mock.js ./api/sendEmail.js '{"email":"alt.da-8oetp0g2@yopmail.com", "subject":"[CI] ${{ matrix.package }} est inaccessible! ", "content":"Message automatique, veuillez contacter l'administrateur du site."}'
+        run: node mock.js ./api/sendEmail.js '{"email":"alt.da-8oetp0g2@yopmail.com", "subject":"[CI] ${{ matrix.package }} est inaccessible! ", "content":"Message automatique, veuillez contacter un administrateur du site."}'
