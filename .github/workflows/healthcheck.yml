@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install mail
-        run: sudo apt update && apt install -y mail
+        run: apt update && install -y mail
       - name: Package
         shell: bash
         run: |
