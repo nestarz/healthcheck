@@ -26,9 +26,8 @@ jobs:
             handler({ body: process.argv[3] }, { end: console.log })
           );
           EOF
-      - run: if echo $(curl -sL --head ${{ matrix.package }}) | grep "HTTP/2 200"); then echo OK; else exit 1; fi
-        continue-on-error: true
-      - if: steps.action.outcome != 'success'
+      - run: if echo $(curl -sL --head ${{ matrix.package }}) | grep "HTTP/2 200"; then echo OK; else exit 1; fi
+      - if: failure()
         env:
           SMTP_AUTH_KEY: ${{ secrets.SMTP_AUTH_KEY }}
           FROM_EMAIL: ${{ secrets.FROM_EMAIL }}
