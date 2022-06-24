@@ -23,7 +23,7 @@ const sendMail = ({ from = FROM_EMAIL, to, subject, content }) =>
       .on("data", (b) =>
         /^221/.test(noopLog(b.toString()))
           ? res(socket.destroy())
-          : /(Error: )|(rejected: )/.test(b.toString())
+          : /(Error: )|(rejected: )|(535)|(Authentication failed)/.test(b.toString())
           ? rej((socket.destroy(), b.toString()))
           : i >= commands.length
           ? rej((socket.destroy(), "i>=commands"))
